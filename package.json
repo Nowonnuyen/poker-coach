@@ -1,0 +1,22 @@
+{
+  "name": "workspace_poker",
+  "version": "1.0.0",
+  "description": "Projet Poker Coach en TypeScript avec Jest",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "test:watch": "jest --watchAll"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.6.2",
+    "jest": "^30.2.0",
+    "ts-jest": "^29.4.3",
+    "typescript": "^5.9.3"
+  }
+}
+
