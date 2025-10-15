@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import chokidar from 'chokidar';
+import { analyzeHand } from '../analyzer/liveAnalyzer';
 
 // ⚙️ Chemin vers le dossier history sur Mac
 const handsDir = path.resolve('/Users/nowonnguyen/Library/Application Support/winamax/documents/accounts/NonoBasket/history');
@@ -33,14 +34,26 @@ export function readNewData(filePath: string) {
       data += chunk;
     });
 
-    stream.on('end', () => {
+    // 🔹 on rend la fonction async pour pouvoir await analyzeHand
+    stream.on('end', async () => {
       fileOffsets[filePath] = newSize;
       const hands = splitHands(data);
       if (hands.length > 0) {
-        console.log(`\n[Watcher] Nouvelle main détectée dans "${path.basename(filePath)}"`);
-        hands.forEach((h, i) => {
-          console.log(`--- Main ${i + 1} ---\n${h}\n----------------`);
-        });
+        console.log(`\n[Watcher] Nouvelles mains détectées dans "${path.basename(filePath)}"`);
+
+        // 🔹 boucle de traitement avec analyse IA
+        for (const [i, hand] of hands.entries()) {
+          try {
+            const { advice, reason, meta } = await analyzeHand(hand);
+            console.log(`\n--- Main ${i + 1} ---`);
+            console.log(hand);
+            console.log(`➡️  Conseils IA locaux : ${advice} (${reason})`);
+            console.log(`   Pot: ${meta.pot ?? '-'} | Pot odds: ${(meta.potOdds ?? 0 * 100).toFixed(1)}% | Évaluateur: ${meta.evaluatorUsed ? 'oui' : 'non'}`);
+            console.log('----------------');
+          } catch (err) {
+            console.error('Erreur dans l’analyse de la main :', err);
+          }
+        }
       }
     });
   }
