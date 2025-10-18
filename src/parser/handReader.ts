@@ -3,6 +3,10 @@ import path from 'path';
 import chokidar from 'chokidar';
 import chalk from 'chalk';
 import { analyzeHand } from '../analyzer/liveAnalyzer';
+import { updatePlayerStats } from '../analyzer/playerTracker';
+import { displayPlayerSummary } from '../analyzer/playerDisplay';
+import { savePlayerSummaryToFile } from '../analyzer/playerDisplay';
+
 
 const handsDir = path.resolve('/Users/nowonnguyen/Library/Application Support/winamax/documents/accounts/NonoBasket/history');
 const fileOffsets: Record<string, number> = {};
@@ -60,8 +64,11 @@ export async function readNewData(filePath: string) {
         console.log(chalk.bgYellow.black.bold('════════════════════════════════════════════════════════════════════════'));
         console.log(chalk.bgYellow.black.bold(`🕒 Main ${sessionHandCount} commencée à ${startTime}`));
         console.log(chalk.bgYellow.black.bold('════════════════════════════════════════════════════════════════════════'));
+       
 
         try {
+          updatePlayerStats(hand);
+
           const { advice, reason, meta } = await analyzeHand(hand);
 
           // 💥 Affichage main avec surlignage des cartes et des tours
@@ -81,6 +88,8 @@ export async function readNewData(filePath: string) {
             console.log(chalk.magenta.bold(`│ ${deco} ${winText} ${deco} │`));
             console.log(chalk.magenta.bold('└' + '─'.repeat(lineLength) + '┘\n'));
           }
+          // ✅ Affiche maintenant le résumé des joueurs *après* mise à jour
+          displayPlayerSummary();
 
         } catch (err) {
           console.error('Erreur dans l’analyse de la main :', err);
@@ -111,4 +120,12 @@ export function watchHandsFolder() {
 
 if (require.main === module) {
   watchHandsFolder();
+
+  // 🔹 Sauvegarde automatique du rapport quand tu quittes le watcher
+process.on('SIGINT', () => {
+  console.log(chalk.yellow('\n🛑 Session terminée. Sauvegarde du rapport...'));
+  savePlayerSummaryToFile();
+  process.exit();
+});
+
 }
