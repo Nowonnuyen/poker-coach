@@ -4,14 +4,14 @@ import chokidar from 'chokidar';
 import chalk from 'chalk';
 import { analyzeHand } from '../analyzer/liveAnalyzer';
 import { updatePlayerStats } from '../analyzer/playerTracker';
-import { displayPlayerSummary } from '../analyzer/playerDisplay';
-import { savePlayerSummaryToFile } from '../analyzer/playerDisplay';
-
+import { displayPlayerSummary, savePlayerSummaryToFile } from '../analyzer/playerDisplay';
+import { analyzeSession } from '../analyzer/sessionAnalyzer'; // 🔹 nouveau
 
 const handsDir = path.resolve('/Users/nowonnguyen/Library/Application Support/winamax/documents/accounts/NonoBasket/history');
 const fileOffsets: Record<string, number> = {};
 let sessionHandCount = 0;
 
+// --- découpe le texte en mains individuelles ---
 export function splitHands(content: string): string[] {
   return content
     .split(/\r?\n\r?\n/)
@@ -19,6 +19,7 @@ export function splitHands(content: string): string[] {
     .filter(h => h.length > 0);
 }
 
+// --- mise en couleur des lignes importantes ---
 function highlightHandLines(hand: string) {
   // 💥 Ta main en rouge gras
   const handHighlighted = hand.replace(
@@ -37,6 +38,7 @@ function highlightHandLines(hand: string) {
   return result;
 }
 
+// --- lecture incrémentale des nouvelles données ---
 export async function readNewData(filePath: string) {
   const previousSize = fileOffsets[filePath] || 0;
   const stats = fs.statSync(filePath);
@@ -64,7 +66,6 @@ export async function readNewData(filePath: string) {
         console.log(chalk.bgYellow.black.bold('════════════════════════════════════════════════════════════════════════'));
         console.log(chalk.bgYellow.black.bold(`🕒 Main ${sessionHandCount} commencée à ${startTime}`));
         console.log(chalk.bgYellow.black.bold('════════════════════════════════════════════════════════════════════════'));
-       
 
         try {
           updatePlayerStats(hand);
@@ -78,7 +79,7 @@ export async function readNewData(filePath: string) {
           console.log(`➡️  Conseils IA : ${chalk.green.bold(advice)} (${reason})`);
           console.log(`Pot: ${meta.pot ?? '-'} | Pot odds: ${(meta.potOdds ?? 0 * 100).toFixed(1)}% | Évaluateur: ${meta.evaluatorUsed ? 'oui' : 'non'}`);
 
-          // 🟣 Si victoire
+          // 🟣 Si victoire → encadré violet
           const winMatch = hand.match(/(NonoBasket.*(won|remporte).*)/i);
           if (winMatch) {
             const winText = winMatch[1].trim();
@@ -88,7 +89,8 @@ export async function readNewData(filePath: string) {
             console.log(chalk.magenta.bold(`│ ${deco} ${winText} ${deco} │`));
             console.log(chalk.magenta.bold('└' + '─'.repeat(lineLength) + '┘\n'));
           }
-          // ✅ Affiche maintenant le résumé des joueurs *après* mise à jour
+
+          // ✅ Affiche le résumé des joueurs après mise à jour
           displayPlayerSummary();
 
         } catch (err) {
@@ -99,6 +101,7 @@ export async function readNewData(filePath: string) {
   }
 }
 
+// --- surveillance du dossier ---
 export function watchHandsFolder() {
   console.log(`[Watcher] Surveillance du dossier : ${handsDir}`);
 
@@ -118,14 +121,18 @@ export function watchHandsFolder() {
   watcher.on('error', err => console.error('Erreur watcher :', err));
 }
 
+// --- Exécution directe ---
 if (require.main === module) {
   watchHandsFolder();
 
-  // 🔹 Sauvegarde automatique du rapport quand tu quittes le watcher
-process.on('SIGINT', () => {
-  console.log(chalk.yellow('\n🛑 Session terminée. Sauvegarde du rapport...'));
-  savePlayerSummaryToFile();
-  process.exit();
-});
+  // 🔹 Sauvegarde automatique + analyse stratégique à la fin
+  process.on('SIGINT', () => {
+    console.log(chalk.yellow('\n🛑 Session terminée. Sauvegarde du rapport...'));
 
+    const report = analyzeSession(); // 🔥 nouveau rapport stratégique
+    console.log(report);
+
+    savePlayerSummaryToFile();
+    process.exit();
+  });
 }
