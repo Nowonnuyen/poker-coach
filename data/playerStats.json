@@ -1,12 +1,12 @@
 {
   "NonoBasket": {
     "name": "NonoBasket",
-    "handsPlayed": 290,
-    "vpip": 69,
-    "pfr": 18,
-    "winnings": 16.009999999999998,
-    "lastSeen": 1760858624711,
-    "lastTable": "Aalen"
+    "handsPlayed": 325,
+    "vpip": 80,
+    "pfr": 22,
+    "winnings": 20.279999999999998,
+    "lastSeen": 1760867914328,
+    "lastTable": "Nice 07"
   },
   "Nouvlabien": {
     "name": "Nouvlabien",
@@ -293,5 +293,59 @@
     "winnings": 0,
     "lastSeen": 1760858567375,
     "lastTable": "Aalen"
+  },
+  "CaroCastor87": {
+    "name": "CaroCastor87",
+    "handsPlayed": 35,
+    "vpip": 5,
+    "pfr": 2,
+    "winnings": 0.5800000000000001,
+    "lastSeen": 1760867914328,
+    "lastTable": "Nice 07"
+  },
+  "Otto6R": {
+    "name": "Otto6R",
+    "handsPlayed": 34,
+    "vpip": 15,
+    "pfr": 10,
+    "winnings": 0.73,
+    "lastSeen": 1760867901254,
+    "lastTable": "Nice 07"
+  },
+  "KARLILEBON": {
+    "name": "KARLILEBON",
+    "handsPlayed": 35,
+    "vpip": 11,
+    "pfr": 3,
+    "winnings": 2.56,
+    "lastSeen": 1760867914328,
+    "lastTable": "Nice 07"
+  },
+  "titi le chat": {
+    "name": "titi le chat",
+    "handsPlayed": 35,
+    "vpip": 18,
+    "pfr": 2,
+    "winnings": 0.64,
+    "lastSeen": 1760867914328,
+    "lastTable": "Nice 07"
+  },
+  "NonoBasket showed [4h 4d] and won 0.05€ with Two pairs : Queens and 4\nSeat 5: titi le chat": {
+    "name": "NonoBasket showed [4h 4d] and won 0.05€ with Two pairs : Queens and 4\nSeat 5: titi le chat",
+    "handsPlayed": 1,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760866434327,
+    "lastTable": "Nice 07"
+  },
+  "NonoBasket showed [8s 8c] and lost with Two pairs : 8 and 4\nSeat 4: KARLILEBON": {
+    "name": "NonoBasket showed [8s 8c] and lost with Two pairs : 8 and 4\nSeat 4: KARLILEBON",
+    "handsPlayed": 1,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760866632008,
+    "lastTable": "Nice 07"
   }
 }

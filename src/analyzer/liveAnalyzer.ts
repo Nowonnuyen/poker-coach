@@ -1,148 +1,160 @@
 // src/analyzer/liveAnalyzer.ts
-import path from 'path';
+import path from "path";
+import { askChatGPT, openaiEnabled } from "../api/openaiClient";
 
 /**
  * analyzeHand(content)
  * - content: texte brut d'une main (Winamax)
  * - retourne un objet {advice, reason, meta}
- *
- * Le code essaye d'utiliser tes utilitaires existants (handEvaluator, poker)
- * via require() — si les modules/export attendus ne sont pas présents,
- * il tombe sur des heuristiques simples pour fournir un conseil.
  */
 
 export async function analyzeHand(content: string): Promise<{
-  advice: 'CALL' | 'FOLD' | 'RAISE' | 'CHECK' | 'UNKNOWN';
+  advice: "CALL" | "FOLD" | "RAISE" | "CHECK" | "UNKNOWN";
   reason: string;
   meta: Record<string, any>;
 }> {
-  // Normaliser le contenu
-  const text = (content || '').toString();
+  const text = (content || "").toString();
 
-  // Tentative d'import dynamique de tes utilitaires existants
   let handEvalModule: any = null;
   let pokerModule: any = null;
 
+  // ✅ Tentative d’import dynamique des utilitaires (si présents)
   try {
-    handEvalModule = require(path.resolve(__dirname, '../utils/handEvaluator'));
-  } catch (e) {
+    handEvalModule = require(path.resolve(__dirname, "../utils/handEvaluator"));
+  } catch {
     try {
-      handEvalModule = require(path.resolve(__dirname, '../../src/utils/handEvaluator'));
-    } catch (e2) {
+      handEvalModule = require(path.resolve(
+        __dirname,
+        "../../src/utils/handEvaluator"
+      ));
+    } catch {
       handEvalModule = null;
     }
   }
 
   try {
-    pokerModule = require(path.resolve(__dirname, '../utils/poker'));
-  } catch (e) {
+    pokerModule = require(path.resolve(__dirname, "../utils/poker"));
+  } catch {
     try {
-      pokerModule = require(path.resolve(__dirname, '../../src/utils/poker'));
-    } catch (e2) {
+      pokerModule = require(path.resolve(__dirname, "../../src/utils/poker"));
+    } catch {
       pokerModule = null;
     }
   }
 
-  // helper: extract first numeric value after a keyword
+  // 🔍 Extraction heuristique des valeurs
   const extractNumberAfter = (regex: RegExp) => {
     const m = text.match(regex);
     if (!m) return null;
-    const num = m[1] ? m[1].replace(/[^\d.]/g, '') : null;
+    const num = m[1] ? m[1].replace(/[^\d.]/g, "") : null;
     return num ? Number(num) : null;
   };
 
-  // Essayer d'extraire pot et bet depuis le texte (heuristique)
-  const pot = extractNumberAfter(/Pot[: ]+([0-9.,]+)/i) ?? extractNumberAfter(/pot[: ]+([0-9.,]+)/i);
-  const toCall = extractNumberAfter(/calls?[: ]+([0-9.,]+)/i) ?? extractNumberAfter(/to call[: ]+([0-9.,]+)/i);
+  const pot =
+    extractNumberAfter(/Pot[: ]+([0-9.,]+)/i) ??
+    extractNumberAfter(/pot[: ]+([0-9.,]+)/i);
+  const toCall =
+    extractNumberAfter(/calls?[: ]+([0-9.,]+)/i) ??
+    extractNumberAfter(/to call[: ]+([0-9.,]+)/i);
 
-  // Essayer d'extraire les cartes fermées (hole cards)
-  // Winamax often prints something like: "Dealt to Player [Ah Kh]" or "Holecards [Ah Kh]"
-  const cardsMatch = text.match(/\[([2-9ATJQK]{1}[hdcs]?[\s,]+[2-9ATJQK]{1}[hdcs]?)\]/i)
-    || text.match(/Dealt to .* \[([2-9ATJQK]{1}[hdcs]?[\s,]+[2-9ATJQK]{1}[hdcs]?)\]/i)
-    || text.match(/Hole cards?:\s*([2-9ATJQK]{1}[hdcs]?\s+[2-9ATJQK]{1}[hdcs]?)/i);
+  const cardsMatch =
+    text.match(/\[([2-9ATJQK]{1}[hdcs]?[\s,]+[2-9ATJQK]{1}[hdcs]?)\]/i) ||
+    text.match(
+      /Dealt to .* \[([2-9ATJQK]{1}[hdcs]?[\s,]+[2-9ATJQK]{1}[hdcs]?)\]/i
+    ) ||
+    text.match(
+      /Hole cards?:\s*([2-9ATJQK]{1}[hdcs]?\s+[2-9ATJQK]{1}[hdcs]?)/i
+    );
 
-  const holecards = cardsMatch ? cardsMatch[1].replace(/\s+/g, ' ').trim() : null;
+  const holecards = cardsMatch
+    ? cardsMatch[1].replace(/\s+/g, " ").trim()
+    : null;
 
-  // If hand evaluator exists, try to get hand strength
+  // 🔢 Évaluation automatique si module dispo
   let handStrength: any = null;
   try {
     if (handEvalModule) {
-      // try a bunch of common exported names
-      const fn = handEvalModule.evaluateHand || handEvalModule.evaluate || handEvalModule.handStrength || handEvalModule.getHandStrength;
-      if (typeof fn === 'function') {
-        // pass the raw content — modules often parse strings
+      const fn =
+        handEvalModule.evaluateHand ||
+        handEvalModule.evaluate ||
+        handEvalModule.handStrength ||
+        handEvalModule.getHandStrength;
+      if (typeof fn === "function") {
         handStrength = fn(text);
       } else {
-        // If module exports a default object with functions
-        const defaultFn = handEvalModule.default && (handEvalModule.default.evaluateHand || handEvalModule.default.evaluate);
-        if (typeof defaultFn === 'function') handStrength = defaultFn(text);
+        const defaultFn =
+          handEvalModule.default &&
+          (handEvalModule.default.evaluateHand ||
+            handEvalModule.default.evaluate);
+        if (typeof defaultFn === "function")
+          handStrength = defaultFn(text);
       }
     }
-  } catch (e) {
-    // ignore — we'll fallback to heuristics
+  } catch {
     handStrength = null;
   }
 
-  // If poker module exists, try potOdds calculation
+  // ♠️ Pot odds (si module présent)
   let potOddsValue: number | null = null;
   try {
     if (pokerModule) {
-      const potOddsFn = pokerModule.potOdds || pokerModule.calculatePotOdds || pokerModule.getPotOdds;
-      if (typeof potOddsFn === 'function' && pot != null && toCall != null) {
-        // many implementations potOdds(bet, pot) — pass toCall and pot
+      const potOddsFn =
+        pokerModule.potOdds ||
+        pokerModule.calculatePotOdds ||
+        pokerModule.getPotOdds;
+      if (typeof potOddsFn === "function" && pot != null && toCall != null) {
         potOddsValue = potOddsFn(toCall, pot);
       }
     }
-  } catch (e) {
+  } catch {
     potOddsValue = null;
   }
 
-  // Simple heuristic fallback when no evaluator:
+  // 💡 Fallback : heuristique simple si pas d’analyseur
   if (!handStrength) {
-    // naive heuristic from holecards if available
-    let heuristicStrength = 'unknown';
+    let heuristicStrength = "unknown";
     if (holecards) {
-      const hc = holecards.toUpperCase().replace(/[, ]+/g, ' ').split(' ');
-      const ranks = hc.map(c => c[0]);
-      // pocket pair?
-      if (ranks[0] === ranks[1]) heuristicStrength = 'pair';
-      // high card both A or K
-      else if (ranks.includes('A') || ranks.includes('K')) heuristicStrength = 'high';
-      else heuristicStrength = 'medium';
+      const hc = holecards.toUpperCase().replace(/[, ]+/g, " ").split(" ");
+      const ranks = hc.map((c) => c[0]);
+      if (ranks[0] === ranks[1]) heuristicStrength = "pair";
+      else if (ranks.includes("A") || ranks.includes("K"))
+        heuristicStrength = "high";
+      else heuristicStrength = "medium";
     }
     handStrength = { summary: heuristicStrength };
   }
 
-  // Decision logic (simple first iteration)
-  // - If evaluator returns a "strong" signal → RAISE
-  // - If pot odds are favorable and hand is medium/high → CALL
-  // - Otherwise → FOLD
-  let advice: 'CALL' | 'FOLD' | 'RAISE' | 'CHECK' | 'UNKNOWN' = 'UNKNOWN';
-  let reason = '';
+  // 🎯 Logique de décision basique
+  let advice: "CALL" | "FOLD" | "RAISE" | "CHECK" | "UNKNOWN" = "UNKNOWN";
+  let reason = "";
 
-  const summary = typeof handStrength === 'string'
-    ? handStrength
-    : handStrength?.summary || '';
+  const summary =
+    typeof handStrength === "string"
+      ? handStrength
+      : handStrength?.summary || "";
 
   const summaryLower = summary.toLowerCase();
 
-  if (summaryLower.includes('straight') || summaryLower.includes('flush') || summaryLower.includes('full')) {
-    advice = 'RAISE';
-    reason = 'Main très forte détectée.';
-  } else if (summaryLower.includes('pair') || summaryLower.includes('high')) {
+  if (
+    summaryLower.includes("straight") ||
+    summaryLower.includes("flush") ||
+    summaryLower.includes("full")
+  ) {
+    advice = "RAISE";
+    reason = "Main très forte détectée.";
+  } else if (summaryLower.includes("pair") || summaryLower.includes("high")) {
     if (potOddsValue && potOddsValue < 0.25) {
-      advice = 'CALL';
-      reason = 'Bonne cote du pot et main décente.';
+      advice = "CALL";
+      reason = "Bonne cote du pot et main décente.";
     } else {
-      advice = 'CHECK';
-      reason = 'Main moyenne, prudence.';
+      advice = "CHECK";
+      reason = "Main moyenne, prudence.";
     }
   } else {
-    advice = 'FOLD';
-    reason = 'Main faible ou situation défavorable.';
+    advice = "FOLD";
+    reason = "Main faible ou situation défavorable.";
   }
 
-  // Meta infos
   const meta = {
     holecards,
     pot,
@@ -152,4 +164,27 @@ export async function analyzeHand(content: string): Promise<{
   };
 
   return { advice, reason, meta };
+}
+
+/**
+ * 🧠 getLiveAdviceFromAI()
+ * Fournit un commentaire court de ChatGPT sur la main.
+ */
+export async function getLiveAdviceFromAI(handText: string): Promise<string> {
+  if (!openaiEnabled) return "";
+
+  try {
+    const prompt = `
+Tu es un coach poker expérimenté. Voici une main complète jouée par le héros (NonoBasket).
+Analyse la qualité des décisions et propose une suggestion claire et concrète pour mieux jouer ce spot.
+Main :
+${handText}
+    `.trim();
+
+    const response = await askChatGPT(prompt);
+    return response ? "💬 " + response : "";
+  } catch (err: any) {
+    console.error("Erreur getLiveAdviceFromAI:", err?.message || err);
+    return "";
+  }
 }
