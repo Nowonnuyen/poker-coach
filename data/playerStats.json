@@ -1,10 +1,12 @@
 {
   "NonoBasket": {
     "name": "NonoBasket",
-    "handsPlayed": 65,
-    "vpip": 13,
-    "pfr": 6,
-    "winnings": 2.3
+    "handsPlayed": 290,
+    "vpip": 69,
+    "pfr": 18,
+    "winnings": 16.009999999999998,
+    "lastSeen": 1760858624711,
+    "lastTable": "Aalen"
   },
   "Nouvlabien": {
     "name": "Nouvlabien",
@@ -71,10 +73,12 @@
   },
   "FMking2908": {
     "name": "FMking2908",
-    "handsPlayed": 17,
-    "vpip": 5,
+    "handsPlayed": 53,
+    "vpip": 14,
     "pfr": 0,
-    "winnings": 1.22
+    "winnings": 1.22,
+    "lastSeen": 1760855757113,
+    "lastTable": "Aalen 03"
   },
   "pere severe": {
     "name": "pere severe",
@@ -82,5 +86,212 @@
     "vpip": 4,
     "pfr": 2,
     "winnings": 0.9000000000000001
+  },
+  "jep4yebien": {
+    "name": "jep4yebien",
+    "handsPlayed": 165,
+    "vpip": 65,
+    "pfr": 51,
+    "winnings": 20.699999999999996,
+    "lastSeen": 1760855757125,
+    "lastTable": "Aalen 03"
+  },
+  "epais-505117": {
+    "name": "epais-505117",
+    "handsPlayed": 159,
+    "vpip": 46,
+    "pfr": 19,
+    "winnings": 30.220000000000002,
+    "lastSeen": 1760855757119,
+    "lastTable": "Aalen 03"
+  },
+  "mrick30": {
+    "name": "mrick30",
+    "handsPlayed": 110,
+    "vpip": 48,
+    "pfr": 13,
+    "winnings": 2.4800000000000004,
+    "lastSeen": 1760855757100,
+    "lastTable": "Aalen 03"
+  },
+  "omebox1983": {
+    "name": "omebox1983",
+    "handsPlayed": 36,
+    "vpip": 16,
+    "pfr": 8,
+    "winnings": 2.56,
+    "lastSeen": 1760855757066,
+    "lastTable": "Aalen 03"
+  },
+  "Lionel1331": {
+    "name": "Lionel1331",
+    "handsPlayed": 18,
+    "vpip": 12,
+    "pfr": 3,
+    "winnings": 1.02,
+    "lastSeen": 1760855757092,
+    "lastTable": "Aalen 03"
+  },
+  "hectorlahach": {
+    "name": "hectorlahach",
+    "handsPlayed": 3,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760855757093,
+    "lastTable": "Aalen 03"
+  },
+  "Fanfan190": {
+    "name": "Fanfan190",
+    "handsPlayed": 39,
+    "vpip": 9,
+    "pfr": 9,
+    "winnings": 0.24,
+    "lastSeen": 1760855757116,
+    "lastTable": "Aalen 03"
+  },
+  "NonoBasket showed [2d Ad] and won 0.18€ with One pair : 2\nSeat 3: epais-505117": {
+    "name": "NonoBasket showed [2d Ad] and won 0.18€ with One pair : 2\nSeat 3: epais-505117",
+    "handsPlayed": 3,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760855757108,
+    "lastTable": "Aalen 03"
+  },
+  "LB-5": {
+    "name": "LB-5",
+    "handsPlayed": 29,
+    "vpip": 8,
+    "pfr": 3,
+    "winnings": 0.23,
+    "lastSeen": 1760856166281,
+    "lastTable": "Aalen 03"
+  },
+  "Shane785": {
+    "name": "Shane785",
+    "handsPlayed": 31,
+    "vpip": 18,
+    "pfr": 2,
+    "winnings": 4.73,
+    "lastSeen": 1760856628966,
+    "lastTable": "Aalen 03"
+  },
+  "captainogue": {
+    "name": "captainogue",
+    "handsPlayed": 14,
+    "vpip": 4,
+    "pfr": 1,
+    "winnings": 0.08,
+    "lastSeen": 1760855977842,
+    "lastTable": "Aalen 03"
+  },
+  "NonoBasket showed [Ac 7s] and won 0.17€ with Two pairs : Aces and Queens\nSeat 4: Shane785": {
+    "name": "NonoBasket showed [Ac 7s] and won 0.17€ with Two pairs : Aces and Queens\nSeat 4: Shane785",
+    "handsPlayed": 2,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760855757123,
+    "lastTable": "Aalen 03"
+  },
+  "Ninja_483925": {
+    "name": "Ninja_483925",
+    "handsPlayed": 17,
+    "vpip": 12,
+    "pfr": 2,
+    "winnings": 4.02,
+    "lastSeen": 1760856628966,
+    "lastTable": "Aalen 03"
+  },
+  "J&B 54": {
+    "name": "J&B 54",
+    "handsPlayed": 10,
+    "vpip": 2,
+    "pfr": 0,
+    "winnings": 0.08,
+    "lastSeen": 1760856628966,
+    "lastTable": "Aalen 03"
+  },
+  "Azulejos": {
+    "name": "Azulejos",
+    "handsPlayed": 7,
+    "vpip": 4,
+    "pfr": 4,
+    "winnings": 1.09,
+    "lastSeen": 1760856628966,
+    "lastTable": "Aalen 03"
+  },
+  "NonoBasket showed [3d Qd] and lost with High card : King\nSeat 2: Ninja_483925 showed [8d As] and won 0.08€ with One pair : 8\nSeat 4: Shane785": {
+    "name": "NonoBasket showed [3d Qd] and lost with High card : King\nSeat 2: Ninja_483925 showed [8d As] and won 0.08€ with One pair : 8\nSeat 4: Shane785",
+    "handsPlayed": 1,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760856328146,
+    "lastTable": "Aalen 03"
+  },
+  "Shane785 showed [Th Kc] and lost with One pair : 7\nSeat 5: Azulejos": {
+    "name": "Shane785 showed [Th Kc] and lost with One pair : 7\nSeat 5: Azulejos",
+    "handsPlayed": 1,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760856409986,
+    "lastTable": "Aalen 03"
+  },
+  "Sylvanius": {
+    "name": "Sylvanius",
+    "handsPlayed": 39,
+    "vpip": 16,
+    "pfr": 14,
+    "winnings": 0.16,
+    "lastSeen": 1760858624711,
+    "lastTable": "Aalen"
+  },
+  "haiphong69": {
+    "name": "haiphong69",
+    "handsPlayed": 39,
+    "vpip": 12,
+    "pfr": 2,
+    "winnings": 0.8400000000000001,
+    "lastSeen": 1760858624711,
+    "lastTable": "Aalen"
+  },
+  "paulincelest": {
+    "name": "paulincelest",
+    "handsPlayed": 20,
+    "vpip": 2,
+    "pfr": 2,
+    "winnings": 0,
+    "lastSeen": 1760858567360,
+    "lastTable": "Aalen"
+  },
+  "Iimpy": {
+    "name": "Iimpy",
+    "handsPlayed": 39,
+    "vpip": 17,
+    "pfr": 15,
+    "winnings": 7.979999999999999,
+    "lastSeen": 1760858624711,
+    "lastTable": "Aalen"
+  },
+  "Belette.Xs69": {
+    "name": "Belette.Xs69",
+    "handsPlayed": 19,
+    "vpip": 11,
+    "pfr": 8,
+    "winnings": 1.52,
+    "lastSeen": 1760858624711,
+    "lastTable": "Aalen"
+  },
+  "haiphong69 showed [2c Ac] and lost with Two pairs : Aces and 2\nSeat 3: Belette.Xs69 showed [Jc Jh] and lost with Trips of Jacks\nSeat 5: Iimpy": {
+    "name": "haiphong69 showed [2c Ac] and lost with Two pairs : Aces and 2\nSeat 3: Belette.Xs69 showed [Jc Jh] and lost with Trips of Jacks\nSeat 5: Iimpy",
+    "handsPlayed": 2,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760858567375,
+    "lastTable": "Aalen"
   }
 }
