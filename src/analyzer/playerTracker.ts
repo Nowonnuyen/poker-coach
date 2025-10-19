@@ -7,7 +7,8 @@ export interface PlayerStats {
   vpip: number;
   pfr: number;
   winnings: number;
-  lastSeen?: number; // 🕒 ajouté pour pouvoir suivre l'activité récente
+  lastSeen?: number;   // dernière activité (ms)
+  lastTable?: string;  // 🆕 dernière table vue (ex: "Aalen 03")
 }
 
 const statsFile = path.resolve(__dirname, '../../data/playerStats.json');
@@ -30,11 +31,15 @@ function saveStats(stats: Record<string, PlayerStats>) {
   fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2), 'utf-8');
 }
 
-// --- Met à jour les stats d’un joueur ---
+// --- Met à jour les stats à partir d’une main Winamax ---
 export function updatePlayerStats(handText: string) {
   const stats = loadStats();
 
-  // --- Trouve tous les pseudos de la main ---
+  // 🆕 Extraire le nom de la table (ex: "Aalen 03")
+  const tableMatch = handText.match(/Table:\s*'([^']+)'/i);
+  const tableName = tableMatch ? tableMatch[1].trim() : undefined;
+
+  // Trouve tous les pseudos de la main
   const playerRegex = /Seat \d+: ([^\(]+) \(/g;
   let match;
   const players: string[] = [];
@@ -44,7 +49,7 @@ export function updatePlayerStats(handText: string) {
     if (!players.includes(name)) players.push(name);
   }
 
-  // --- Détection simple de participation et d’agression ---
+  // Détection simple de participation / agression / gains
   for (const player of players) {
     if (!stats[player]) {
       stats[player] = {
@@ -53,12 +58,15 @@ export function updatePlayerStats(handText: string) {
         vpip: 0,
         pfr: 0,
         winnings: 0,
+        lastSeen: Date.now(),
+        lastTable: tableName, // 🆕 on mémorise la table
       };
     }
 
     const s = stats[player];
     s.handsPlayed++;
     s.lastSeen = Date.now();
+    if (tableName) s.lastTable = tableName; // 🆕 mise à jour de la table courante
 
     // VPIP : s’il y a "calls" ou "raises"
     if (new RegExp(`${player} (calls|raises)`, 'i').test(handText)) {
@@ -81,7 +89,7 @@ export function updatePlayerStats(handText: string) {
   saveStats(stats);
 }
 
-// --- Obtenir un résumé lisible ---
+// --- Obtenir un résumé lisible (toutes tables confondues) ---
 export function summarizePlayers(): string {
   const stats = loadStats();
   const players = Object.values(stats);
@@ -98,7 +106,7 @@ export function summarizePlayers(): string {
   return lines.join('\n');
 }
 
-// --- Expose toutes les stats pour d'autres modules ---
+// --- Expose toutes les stats (objet) ---
 export function getAllPlayerStats(): Record<string, PlayerStats> {
   return loadStats();
 }

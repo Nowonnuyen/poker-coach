@@ -1,7 +1,7 @@
-import chalk from 'chalk';
-import { getAllPlayerStats, PlayerStats } from './playerTracker';
+import chalk from "chalk";
+import { getAllPlayerStats, PlayerStats } from "./playerTracker";
 
-export interface OpponentProfile {
+interface OpponentProfile {
   name: string;
   vpip: number;
   pfr: number;
@@ -10,86 +10,132 @@ export interface OpponentProfile {
   emoji: string;
 }
 
-export interface TableProfile {
-  players: OpponentProfile[];
-  tableMood: string;
-  avgVPIP: number;
-  avgPFR: number;
-}
-
-/** Classe un joueur selon ses stats. */
+/**
+ * Classe un joueur selon ses stats (VPIP/PFR)
+ */
 function classifyPlayer(p: PlayerStats): OpponentProfile {
-  const vpip = (p.vpip / (p.handsPlayed || 1)) * 100;
-  const pfr = (p.pfr / (p.handsPlayed || 1)) * 100;
-  const win = p.winnings;
+  const vpip = (p.vpip / p.handsPlayed) * 100;
+  const pfr = (p.pfr / p.handsPlayed) * 100;
 
-  let type = 'REG';
-  let emoji = '😐';
+  let type = "REG";
+  let emoji = "😐";
 
-  if (vpip < 15 && pfr < 10) { type = 'NIT'; emoji = '🧊'; }
-  else if (vpip > 15 && vpip <= 25 && pfr >= 12 && pfr <= 20) { type = 'TAG'; emoji = '🎯'; }
-  else if (vpip > 30 && pfr > 20) { type = 'LAG'; emoji = '🔥'; }
-  else if (vpip > 40 && pfr < 10) { type = 'CALLING STATION'; emoji = '💤'; }
-  else if (vpip > 50 && pfr < 5)  { type = 'FISH'; emoji = '🎣'; }
-
-  if (win > 10) emoji += '💰';
-  if (win < -5) emoji += '🥶';
-
-  return { name: p.name, vpip, pfr, winnings: win, type, emoji };
-}
-
-/** Vue d’ensemble de la table. */
-export function analyzeOpponents(): TableProfile {
-  const stats = getAllPlayerStats(); // Record<string, PlayerStats>
-  // ✅ Cast explicite pour éviter unknown[]
-  const players = Object.values(stats) as PlayerStats[];
-
-  if (players.length === 0) {
-    console.log(chalk.gray('Aucun joueur à profiler.'));
-    return { players: [], tableMood: 'inconnue', avgVPIP: 0, avgPFR: 0 };
+  if (vpip >= 50 && pfr <= 15) {
+    type = "FISH";
+    emoji = "🎣";
+  } else if (vpip >= 40 && pfr >= 25) {
+    type = "LAG";
+    emoji = "🔥";
+  } else if (vpip <= 20 && pfr <= 10) {
+    type = "NIT";
+    emoji = "🧊";
   }
 
-  const profiles = players.map((p) => classifyPlayer(p));
+  return { name: p.name, vpip, pfr, winnings: p.winnings, type, emoji };
+}
 
+/**
+ * Récupère les pseudos de la main en cours (même si Seat X: absent)
+ */
+function extractPlayersFromHand(hand: string): string[] {
+  const players = new Set<string>();
+
+  // 1️⃣ Cherche les lignes Seat X:
+  const seatMatches = [...hand.matchAll(/Seat \d+: ([^\(]+)/g)].map((m) =>
+    m[1].trim()
+  );
+
+  // 2️⃣ Cherche les noms dans les actions (calls, raises, bets, folds, checks)
+  const actionMatches = [
+    ...hand.matchAll(
+      /^([A-Za-z0-9_\-\s]+)\s+(calls|raises|bets|folds|checks)/gim
+    ),
+  ].map((m) => m[1].trim());
+
+  for (const name of [...seatMatches, ...actionMatches]) {
+    if (name && name.length > 1) players.add(name);
+  }
+
+  return Array.from(players);
+}
+
+/**
+ * Construit un profil de table à partir des joueurs détectés dans la main
+ */
+export function getTableProfileAndAdvice(handText: string): string {
+  const allStats = getAllPlayerStats();
+  const playersInHand = extractPlayersFromHand(handText);
+
+  if (playersInHand.length === 0) {
+    return chalk.gray("📭 Aucun joueur détecté dans cette main.");
+  }
+
+  const tablePlayers = Object.values(allStats).filter((p) =>
+    playersInHand.includes(p.name)
+  );
+
+  // ✅ Si aucun profil trouvé, afficher un message plus clair
+  if (tablePlayers.length === 0) {
+    const tableMatch = handText.match(/Table:\s*'([^']+)'/);
+    const tableName = tableMatch ? tableMatch[1] : "Inconnue";
+    return chalk.gray(
+      `📭 Aucun profil fiable encore pour la table "${tableName}".`
+    );
+  }
+
+  const profiles: OpponentProfile[] = tablePlayers.map(classifyPlayer);
+
+  // 🔢 Moyennes de la table
   const avgVPIP =
     profiles.reduce((sum, p) => sum + p.vpip, 0) / profiles.length;
   const avgPFR =
     profiles.reduce((sum, p) => sum + p.pfr, 0) / profiles.length;
 
-  let tableMood = 'équilibrée';
-  if (avgVPIP > 35) tableMood = 'très loose 🌀';
-  else if (avgVPIP < 20) tableMood = 'serrée 🧱';
-  else if (avgPFR > 25) tableMood = 'agressive ⚡';
+  let tableType = "équilibrée";
+  let advice =
+    "⚖️ Table équilibrée : joue ton A-game standard, reste patient et observateur.";
 
-  console.log(chalk.bold('\n🎯 PROFIL DE LA TABLE :'));
-  console.log(chalk.gray('──────────────────────────────────────────────'));
-
-  for (const p of profiles) {
-    let color = chalk.white;
-    if (p.type === 'NIT') color = chalk.cyan;
-    else if (p.type === 'TAG') color = chalk.green;
-    else if (p.type === 'LAG') color = chalk.red;
-    else if (p.type === 'CALLING STATION') color = chalk.yellow;
-    else if (p.type === 'FISH') color = chalk.magenta;
-
-    console.log(
-      color(
-        `${p.emoji} ${p.name.padEnd(15)} | VPIP: ${p.vpip.toFixed(1)} | PFR: ${p.pfr.toFixed(1)} | ${p.type} | ${p.winnings.toFixed(2)}€`
-      )
-    );
+  if (avgVPIP > 45) {
+    tableType = "très loose";
+    advice = "💰 Table loose : joue solide, value fort tes bonnes mains.";
+  } else if (avgVPIP < 20) {
+    tableType = "serrée";
+    advice =
+      "🧊 Table tight : tente quelques vols de blinds et 3-bets bien ciblés.";
+  } else if (avgPFR > 25) {
+    tableType = "agressive";
+    advice =
+      "🤖 Table de regs : mixe value et bluffs construits, évite les lines trop standards.";
   }
 
-  console.log(chalk.gray('──────────────────────────────────────────────'));
-  console.log(
-    chalk.bold(
-      `💡 Table moyenne : VPIP ${avgVPIP.toFixed(1)} / PFR ${avgPFR.toFixed(1)} → ${tableMood}`
+  const tableMatch = handText.match(/Table:\s*'([^']+)'/);
+  const tableName = tableMatch ? tableMatch[1] : "Inconnue";
+
+  const profileLines = profiles
+    .map(
+      (p) =>
+        `${p.emoji} ${p.name.padEnd(15)} | VPIP: ${p.vpip.toFixed(
+          1
+        )} | PFR: ${p.pfr.toFixed(1)} | ${p.type.padEnd(15)} | ${p.winnings.toFixed(
+          2
+        )}€`
     )
-  );
+    .join("\n");
 
-  return { players: profiles, tableMood, avgVPIP, avgPFR };
+  return `
+🎯 PROFIL DE TABLE EN TEMPS RÉEL :
+──────────────────────────────────────────────
+${profileLines}
+──────────────────────────────────────────────
+💡 Table "${tableName}" : VPIP ${avgVPIP.toFixed(1)} / PFR ${avgPFR.toFixed(
+    1
+  )} → ${tableType}
+
+💡 STRATÉGIE ACTUELLE :
+${advice}
+──────────────────────────────────────────────
+`;
 }
 
-// Exécution directe pour test
-if (require.main === module) {
-  analyzeOpponents();
-}
+/** ✅ Export par défaut pour corriger ton import */
+export default getTableProfileAndAdvice;
