@@ -21,6 +21,10 @@
   },
   "dependencies": {
     "chalk": "^4.1.2",
-    "chokidar": "^4.0.3"
+    "chokidar": "^4.0.3",
+    "dotenv": "^17.2.3",
+    "formdata-node": "^6.0.3",
+    "node-fetch": "^2.7.0",
+    "openai": "^6.5.0"
   }
 }
