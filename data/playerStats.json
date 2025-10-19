@@ -1,12 +1,12 @@
 {
   "NonoBasket": {
     "name": "NonoBasket",
-    "handsPlayed": 325,
-    "vpip": 80,
-    "pfr": 22,
-    "winnings": 20.279999999999998,
-    "lastSeen": 1760867914328,
-    "lastTable": "Nice 07"
+    "handsPlayed": 384,
+    "vpip": 104,
+    "pfr": 30,
+    "winnings": 25.04000000000001,
+    "lastSeen": 1760873037429,
+    "lastTable": "Aalen 04"
   },
   "Nouvlabien": {
     "name": "Nouvlabien",
@@ -347,5 +347,86 @@
     "winnings": 0,
     "lastSeen": 1760866632008,
     "lastTable": "Nice 07"
+  },
+  "ArMax": {
+    "name": "ArMax",
+    "handsPlayed": 59,
+    "vpip": 36,
+    "pfr": 2,
+    "winnings": 19.330000000000002,
+    "lastSeen": 1760873037429,
+    "lastTable": "Aalen 04"
+  },
+  "MERGENBERG": {
+    "name": "MERGENBERG",
+    "handsPlayed": 59,
+    "vpip": 20,
+    "pfr": 17,
+    "winnings": 3.92,
+    "lastSeen": 1760873037429,
+    "lastTable": "Aalen 04"
+  },
+  "suekoba": {
+    "name": "suekoba",
+    "handsPlayed": 16,
+    "vpip": 4,
+    "pfr": 0,
+    "winnings": 0.22,
+    "lastSeen": 1760872957174,
+    "lastTable": "Aalen 04"
+  },
+  "phil4792": {
+    "name": "phil4792",
+    "handsPlayed": 12,
+    "vpip": 4,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760872954363,
+    "lastTable": "Aalen 04"
+  },
+  "NonoBasket showed [As Ah] and won 0.12€ with Two pairs : Aces and 7\nSeat 2: ArMax": {
+    "name": "NonoBasket showed [As Ah] and won 0.12€ with Two pairs : Aces and 7\nSeat 2: ArMax",
+    "handsPlayed": 2,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760872945330,
+    "lastTable": "Aalen 04"
+  },
+  "Easyrun": {
+    "name": "Easyrun",
+    "handsPlayed": 47,
+    "vpip": 14,
+    "pfr": 14,
+    "winnings": 2.1000000000000005,
+    "lastSeen": 1760873037429,
+    "lastTable": "Aalen 04"
+  },
+  "Ourson pro35": {
+    "name": "Ourson pro35",
+    "handsPlayed": 2,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760872969590,
+    "lastTable": "Aalen 04"
+  },
+  "franck081271": {
+    "name": "franck081271",
+    "handsPlayed": 33,
+    "vpip": 11,
+    "pfr": 5,
+    "winnings": 0.26,
+    "lastSeen": 1760873037429,
+    "lastTable": "Aalen 04"
+  },
+  "ArMax showed [Qd 2s] and won 1.01€ with Trips of 2\nSeat 5: Easyrun": {
+    "name": "ArMax showed [Qd 2s] and won 1.01€ with Trips of 2\nSeat 5: Easyrun",
+    "handsPlayed": 1,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1760872995584,
+    "lastTable": "Aalen 04"
   }
 }
