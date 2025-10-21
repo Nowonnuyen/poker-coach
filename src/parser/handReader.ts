@@ -1,3 +1,4 @@
+// src/parser/handReader.ts
 import fs from "fs";
 import path from "path";
 import chokidar from "chokidar";
@@ -5,7 +6,8 @@ import chalk from "chalk";
 import { analyzeHand, getLiveAdviceFromAI } from "../analyzer/liveAnalyzer";
 import { updatePlayerStats } from "../analyzer/playerTracker";
 import { getTableProfileAndAdvice } from "../analyzer/opponentProfiler";
-import { getMathAdvice } from "../analyzer/mathAdvice"; // 🧮 nouveau
+import { getMathAdvice } from "../analyzer/mathAdvice";
+import { generateSessionAdvice } from "../analyzer/sessionCoach";
 
 const handsDir = path.resolve(
   "/Users/nowonnguyen/Library/Application Support/winamax/documents/accounts/NonoBasket/history"
@@ -42,10 +44,8 @@ function prettyRank(r: string): string {
 function buildCard(rank: string, suit: Suit): string[] {
   const r = prettyRank(rank);
   const { sym, colorize } = suitGlyph(suit);
-
   const top = r.padEnd(2, " ");
   const bot = r.padStart(2, " ");
-
   const border = chalk.whiteBright;
   const midSuit = colorize(sym);
 
@@ -142,13 +142,15 @@ export async function readNewData(filePath: string) {
           `Pot: ${meta.pot ?? "-"} | Pot odds: ${((meta.potOdds ?? 0) * 100).toFixed(1)}% | Évaluateur: ${meta.evaluatorUsed ? "oui" : "non"}`
         );
 
-        // 🟧 Conseil mathématique simple, clair, et illustré
-        const mathAdvice = getMathAdvice(meta);
+        // 🟧 Conseil mathématique orange (simple et scolaire)
+        const mathAdvice = getMathAdvice(hand, meta);
         if (mathAdvice) console.log(mathAdvice);
 
+        // 🧠 Commentaire IA global (ChatGPT)
         const aiComment = await getLiveAdviceFromAI(hand);
         if (aiComment) console.log(chalk.cyanBright(aiComment));
 
+        // 🏆 Victoire détectée
         const winMatch = hand.match(/(NonoBasket.*(won|remporte).*)/i);
         if (winMatch) {
           const winText = winMatch[1].trim();
@@ -159,6 +161,7 @@ export async function readNewData(filePath: string) {
           console.log(chalk.magenta.bold("└" + "─".repeat(lineLength) + "┘\n"));
         }
 
+        // 🎯 Profil table et stratégie
         const tableInfo = getTableProfileAndAdvice(hand);
         if (tableInfo) console.log(tableInfo);
       } catch (err) {
@@ -193,6 +196,16 @@ export function watchHandsFolder() {
   watcher.on("error", (err) => console.error("Erreur watcher :", err));
 }
 
+/* ---------------------------------------------------------- */
+
 if (require.main === module) {
   watchHandsFolder();
+
+  // 🟠 Quand tu quittes ou mets en pause (Ctrl + C)
+  process.on("SIGINT", () => {
+    console.log(chalk.yellow("\n🛑 Pause/Fin de session — génération du bilan global..."));
+    const report = generateSessionAdvice("NonoBasket");
+    console.log(report);
+    process.exit(0);
+  });
 }

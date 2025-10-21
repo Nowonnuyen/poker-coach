@@ -1,12 +1,12 @@
 {
   "NonoBasket": {
     "name": "NonoBasket",
-    "handsPlayed": 384,
-    "vpip": 104,
-    "pfr": 30,
-    "winnings": 25.04000000000001,
-    "lastSeen": 1760873037429,
-    "lastTable": "Aalen 04"
+    "handsPlayed": 415,
+    "vpip": 114,
+    "pfr": 36,
+    "winnings": 33.29000000000001,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
   },
   "Nouvlabien": {
     "name": "Nouvlabien",
@@ -428,5 +428,95 @@
     "winnings": 0,
     "lastSeen": 1760872995584,
     "lastTable": "Aalen 04"
+  },
+  "Ciro25": {
+    "name": "Ciro25",
+    "handsPlayed": 21,
+    "vpip": 5,
+    "pfr": 0,
+    "winnings": 0.52,
+    "lastSeen": 1761013347957,
+    "lastTable": "Paris 03"
+  },
+  "ExtrAAminD": {
+    "name": "ExtrAAminD",
+    "handsPlayed": 26,
+    "vpip": 8,
+    "pfr": 7,
+    "winnings": 3.39,
+    "lastSeen": 1761013782444,
+    "lastTable": "Paris 03"
+  },
+  "Hehe.": {
+    "name": "Hehe.",
+    "handsPlayed": 26,
+    "vpip": 7,
+    "pfr": 3,
+    "winnings": 2.27,
+    "lastSeen": 1761013782444,
+    "lastTable": "Paris 03"
+  },
+  "Joel099": {
+    "name": "Joel099",
+    "handsPlayed": 26,
+    "vpip": 13,
+    "pfr": 6,
+    "winnings": 2.66,
+    "lastSeen": 1761013782444,
+    "lastTable": "Paris 03"
+  },
+  "kweffin": {
+    "name": "kweffin",
+    "handsPlayed": 1,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761013423227,
+    "lastTable": "Paris 03"
+  },
+  "1vory_": {
+    "name": "1vory_",
+    "handsPlayed": 4,
+    "vpip": 1,
+    "pfr": 1,
+    "winnings": 0,
+    "lastSeen": 1761013782444,
+    "lastTable": "Paris 03"
+  },
+  "Chiot_pale48": {
+    "name": "Chiot_pale48",
+    "handsPlayed": 5,
+    "vpip": 3,
+    "pfr": 0,
+    "winnings": 0.78,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
+  },
+  "Ed Scorpion": {
+    "name": "Ed Scorpion",
+    "handsPlayed": 5,
+    "vpip": 3,
+    "pfr": 0,
+    "winnings": 0.04,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
+  },
+  "ChecKLaRiveR": {
+    "name": "ChecKLaRiveR",
+    "handsPlayed": 5,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
+  },
+  "Yanouch14": {
+    "name": "Yanouch14",
+    "handsPlayed": 5,
+    "vpip": 2,
+    "pfr": 2,
+    "winnings": 0.68,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
   }
 }
