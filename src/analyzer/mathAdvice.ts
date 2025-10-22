@@ -1,66 +1,57 @@
-// src/analyzer/mathAdvice.ts
 import chalk from "chalk";
 
 /**
- * getMathAdvice(handText, meta)
- * - Tout en ORANGE
- * - Ton/format "cours de lycée"
- * - Donne : rappel simple + calcul étape par étape + exemple d'erreur de maths (EV/range/fold equity)
+ * Donne un conseil mathématique simple et visuel.
+ * Format "cours de lycée" : rappel, exemple, erreur commune, astuce de calcul mental.
  */
 export function getMathAdvice(handText: string, meta: Record<string, any>): string {
-  const orange = (s: string) => chalk.hex("#FFA500")(s); // tout en orange
-  const title = chalk.bgHex("#FFA500").black.bold(" 🧮 CONSEIL MATHÉMATIQUE (mode scolaire) ");
-  const sep = chalk.hex("#FFA500")("────────────────────────────────────────────────────────");
+  const pot = meta.pot ?? 0;
+  const toCall = meta.toCall ?? 0;
+  const potOdds = meta.potOdds ?? 0;
 
-  const pot = Number(meta?.pot ?? 0);
-  const toCall = Number(meta?.toCall ?? 0);
-  const potOdds = Number(meta?.potOdds ?? 0); // ex: 0.25 = 25%
+  // Rappel simple
+  const header = chalk.keyword("orange").bold("\n📘 Petit rappel mathématique :");
+  const reminder =
+    chalk.keyword("orange")(
+      `\n👉 La cote du pot (ou "pot odds") te dit si le call est rentable à long terme.\n` +
+      `Formule :  toCall / (pot + toCall)\n` +
+      `Ici :  ${toCall} / (${pot} + ${toCall}) = ${(potOdds * 100).toFixed(1)}%\n`
+    );
 
-  if (!pot || !toCall) {
-    return `\n${title}\n${sep}\n${orange(
-      "Pas de calcul possible cette fois (montant du pot ou mise à payer manquant)."
-    )}\n${sep}\n`;
-  }
+  // Exemple étape par étape
+  const example =
+    chalk.keyword("orange")(
+      `\n📗 Exemple de calcul :\n` +
+      `Si tu dois payer 20 jetons dans un pot de 80 :\n` +
+      `Pot odds = 20 / (80 + 20) = 0,20 = 20%\n` +
+      `➡️ Cela veut dire que tu dois gagner au moins 1 coup sur 5 pour que ce call soit "EV+" (espérance positive).`
+    );
 
-  // 1) Rappel simple
-  // Pot odds % = mise à payer / (pot total après ton call)
-  const totalIfCall = pot + toCall;
-  const requiredEquity = (toCall / totalIfCall) * 100; // ce que tu dois gagner au minimum
-  const shownOdds = potOdds ? (potOdds * 100) : requiredEquity;
+  // Explication des concepts
+  const concept =
+    chalk.keyword("orange")(
+      `\n📙 Définitions utiles :\n` +
+      `- EV (Expected Value) : gain moyen attendu à long terme.\n` +
+      `- Range : ensemble de mains possibles de ton adversaire.\n` +
+      `- Fold Equity : chance que ton adversaire se couche après ton bet.`
+    );
 
-  // 2) Exemple concret depuis la main
-  // On affiche un "pas à pas" très explicite.
-  const stepByStep =
-    `${orange("1) Pot actuel :")} ${orange(pot.toFixed(2))}\n` +
-    `${orange("2) Mise à payer (to call) :")} ${orange(toCall.toFixed(2))}\n` +
-    `${orange("3) Pot total si tu payes :")} ${orange(`${pot.toFixed(2)} + ${toCall.toFixed(2)} = ${totalIfCall.toFixed(2)}`)}\n` +
-    `${orange("4) Pot odds (≈ % minimum de victoire requis) :")} ${orange(`${toCall.toFixed(2)} / ${totalIfCall.toFixed(2)} = ${requiredEquity.toFixed(1)}%`)}`;
+  // Exemple d’erreur typique
+  const error =
+    chalk.keyword("orange")(
+      `\n⚠️ Erreur fréquente :\n` +
+      `Beaucoup de joueurs paient sans comparer leurs pot odds à leur probabilité réelle de gagner.\n` +
+      `Ex : Tu as 4 cartes de la même couleur → ~9 outs → environ 18% de chance de compléter.\n` +
+      `Si tes pot odds sont 25%, le call est mathématiquement perdant (EV–).`
+    );
 
-  // 3) Erreur de maths illustrée (ex EV / Range / Fold equity)
-  // On fabrique un exemple pédagogique ultra simple :
-  //  - Si requiredEquity ≈ 25%, on montre "rule of 2 et 4" avec 8 outs → 32% au turn (≈ call OK)
-  //  - Sinon on prend un exemple d'overcard (≈ 6 clean outs ~ 12% au turn, donc fold souvent).
-  let errorBlock = "";
-  if (requiredEquity >= 22 && requiredEquity <= 28) {
-    errorBlock =
-      `${orange("❌ Erreur fréquente (EV) :")} croire que payer est mauvais alors que tu as assez d’outs.\n` +
-      `${orange("Exemple :")} tu penses avoir un tirage (≈ 8 outs). ${orange("Règle du 2 et 4")} → au turn ≈ 8 × 2 = 16% ; à la river ≈ 8 × 4 = 32%.\n` +
-      `${orange("Comparaison :")} il faut ≈ ${requiredEquity.toFixed(1)}% (pot odds), ton tirage donne ≈ 32% à la river → ${orange("CALL correct sur un seul barrel")}. (EV = espérance de gain)\n`;
-  } else {
-    errorBlock =
-      `${orange("❌ Erreur fréquente (Range/Fold equity) :")} payer hors position avec une simple overcard en pensant avoir “beaucoup d’équité”.\n` +
-      `${orange("Exemple :")} avec ~6 outs crédibles → au turn ≈ 6 × 2 = 12% seulement.\n` +
-      `${orange("Comparaison :")} il faut ≈ ${requiredEquity.toFixed(1)}%, tu n’as que ≈ 12% → ${orange("FOLD est souvent meilleur")}.\n` +
-      `${orange("(Range = ensemble de mains probables chez vilain ; Fold equity = chances qu’il se couche si tu mises/relances)")}\n`;
-  }
+  // Astuce mentale simple
+  const tip =
+    chalk.keyword("orange")(
+      `\n💡 Astuce de calcul mental :\n` +
+      `- Multiplie tes "outs" par 2 au flop et par 4 au turn pour estimer ton % de chance.\n` +
+      `- Compare ce % avec tes pot odds (si chance > pot odds → call rentable).`
+    );
 
-  // 4) Astuce “de tête”
-  const mental =
-    `${orange("💡 Astuce de tête :")} retiens ${orange("Règle du 2 et 4")}. ` +
-    `${orange("Turn")} : outs × 2 ≈ % d’amélioration ; ${orange("Flop→River")} : outs × 4 ≈ %.\n` +
-    `${orange("Ex : 9 outs")} ⇒ ≈ 18% (turn) ou 36% (flop→river). Compare ce % au ${orange("minimum requis")} (${requiredEquity.toFixed(1)}%).`;
-
-  return `\n${title}\n${sep}\n${orange(
-    "Objectif : comparer ce qu’il faut pour que le call soit rentable (EV ≥ 0) au pourcentage de victoire réaliste."
-  )}\n\n${stepByStep}\n\n${errorBlock}${mental}\n${sep}\n`;
+  return `${header}${reminder}${example}${concept}${error}${tip}\n`;
 }

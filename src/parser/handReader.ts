@@ -1,4 +1,3 @@
-// src/parser/handReader.ts
 import fs from "fs";
 import path from "path";
 import chokidar from "chokidar";
@@ -6,8 +5,8 @@ import chalk from "chalk";
 import { analyzeHand, getLiveAdviceFromAI } from "../analyzer/liveAnalyzer";
 import { updatePlayerStats } from "../analyzer/playerTracker";
 import { getTableProfileAndAdvice } from "../analyzer/opponentProfiler";
-import { getMathAdvice } from "../analyzer/mathAdvice";
-import { generateSessionAdvice } from "../analyzer/sessionCoach";
+import { getMathAdvice } from "../analyzer/mathAdvice"; // 🧮 module mathématique
+import { analyzeEmotions } from "../analyzer/emotionalAnalyzer"; // 🧠 module émotionnel
 
 const handsDir = path.resolve(
   "/Users/nowonnguyen/Library/Application Support/winamax/documents/accounts/NonoBasket/history"
@@ -106,7 +105,6 @@ export async function readNewData(filePath: string) {
   const previousSize = fileOffsets[filePath] || 0;
   const stats = fs.statSync(filePath);
   const newSize = stats.size;
-
   if (newSize <= previousSize) return;
 
   const stream = fs.createReadStream(filePath, {
@@ -142,15 +140,25 @@ export async function readNewData(filePath: string) {
           `Pot: ${meta.pot ?? "-"} | Pot odds: ${((meta.potOdds ?? 0) * 100).toFixed(1)}% | Évaluateur: ${meta.evaluatorUsed ? "oui" : "non"}`
         );
 
-        // 🟧 Conseil mathématique orange (simple et scolaire)
+        // 🧮 Conseil mathématique (cours de lycée)
         const mathAdvice = getMathAdvice(hand, meta);
         if (mathAdvice) console.log(mathAdvice);
 
-        // 🧠 Commentaire IA global (ChatGPT)
+        // 💬 Conseils IA global
         const aiComment = await getLiveAdviceFromAI(hand);
         if (aiComment) console.log(chalk.cyanBright(aiComment));
 
-        // 🏆 Victoire détectée
+        // 🔴 Bloc Analyse Émotionnelle (encadré rouge distinctif)
+        const emotionReport = analyzeEmotions([hand]);
+        if (emotionReport) {
+          console.log(chalk.bgRed.white.bold("\n════════════════════════════════════════════════════"));
+          console.log(chalk.bgRed.white.bold("🔴  ANALYSE ÉMOTIONNELLE  🔴"));
+          console.log(chalk.bgRed.white.bold("════════════════════════════════════════════════════"));
+          console.log(chalk.redBright(emotionReport));
+          console.log(chalk.bgRed.white.bold("════════════════════════════════════════════════════\n"));
+        }
+
+        // 🏆 Si victoire
         const winMatch = hand.match(/(NonoBasket.*(won|remporte).*)/i);
         if (winMatch) {
           const winText = winMatch[1].trim();
@@ -161,7 +169,7 @@ export async function readNewData(filePath: string) {
           console.log(chalk.magenta.bold("└" + "─".repeat(lineLength) + "┘\n"));
         }
 
-        // 🎯 Profil table et stratégie
+        // 🎯 Profil de table
         const tableInfo = getTableProfileAndAdvice(hand);
         if (tableInfo) console.log(tableInfo);
       } catch (err) {
@@ -196,16 +204,6 @@ export function watchHandsFolder() {
   watcher.on("error", (err) => console.error("Erreur watcher :", err));
 }
 
-/* ---------------------------------------------------------- */
-
 if (require.main === module) {
   watchHandsFolder();
-
-  // 🟠 Quand tu quittes ou mets en pause (Ctrl + C)
-  process.on("SIGINT", () => {
-    console.log(chalk.yellow("\n🛑 Pause/Fin de session — génération du bilan global..."));
-    const report = generateSessionAdvice("NonoBasket");
-    console.log(report);
-    process.exit(0);
-  });
 }
