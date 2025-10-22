@@ -1,12 +1,12 @@
 {
   "NonoBasket": {
     "name": "NonoBasket",
-    "handsPlayed": 384,
-    "vpip": 104,
-    "pfr": 30,
-    "winnings": 25.04000000000001,
-    "lastSeen": 1760873037429,
-    "lastTable": "Aalen 04"
+    "handsPlayed": 499,
+    "vpip": 140,
+    "pfr": 48,
+    "winnings": 39.38,
+    "lastSeen": 1761077788838,
+    "lastTable": "Aalen 07"
   },
   "Nouvlabien": {
     "name": "Nouvlabien",
@@ -428,5 +428,176 @@
     "winnings": 0,
     "lastSeen": 1760872995584,
     "lastTable": "Aalen 04"
+  },
+  "Ciro25": {
+    "name": "Ciro25",
+    "handsPlayed": 21,
+    "vpip": 5,
+    "pfr": 0,
+    "winnings": 0.52,
+    "lastSeen": 1761013347957,
+    "lastTable": "Paris 03"
+  },
+  "ExtrAAminD": {
+    "name": "ExtrAAminD",
+    "handsPlayed": 26,
+    "vpip": 8,
+    "pfr": 7,
+    "winnings": 3.39,
+    "lastSeen": 1761013782444,
+    "lastTable": "Paris 03"
+  },
+  "Hehe.": {
+    "name": "Hehe.",
+    "handsPlayed": 26,
+    "vpip": 7,
+    "pfr": 3,
+    "winnings": 2.27,
+    "lastSeen": 1761013782444,
+    "lastTable": "Paris 03"
+  },
+  "Joel099": {
+    "name": "Joel099",
+    "handsPlayed": 26,
+    "vpip": 13,
+    "pfr": 6,
+    "winnings": 2.66,
+    "lastSeen": 1761013782444,
+    "lastTable": "Paris 03"
+  },
+  "kweffin": {
+    "name": "kweffin",
+    "handsPlayed": 1,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761013423227,
+    "lastTable": "Paris 03"
+  },
+  "1vory_": {
+    "name": "1vory_",
+    "handsPlayed": 4,
+    "vpip": 1,
+    "pfr": 1,
+    "winnings": 0,
+    "lastSeen": 1761013782444,
+    "lastTable": "Paris 03"
+  },
+  "Chiot_pale48": {
+    "name": "Chiot_pale48",
+    "handsPlayed": 5,
+    "vpip": 3,
+    "pfr": 0,
+    "winnings": 0.78,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
+  },
+  "Ed Scorpion": {
+    "name": "Ed Scorpion",
+    "handsPlayed": 5,
+    "vpip": 3,
+    "pfr": 0,
+    "winnings": 0.04,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
+  },
+  "ChecKLaRiveR": {
+    "name": "ChecKLaRiveR",
+    "handsPlayed": 5,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
+  },
+  "Yanouch14": {
+    "name": "Yanouch14",
+    "handsPlayed": 5,
+    "vpip": 2,
+    "pfr": 2,
+    "winnings": 0.68,
+    "lastSeen": 1761017822724,
+    "lastTable": "Aalen 05"
+  },
+  "JEFFQUE59": {
+    "name": "JEFFQUE59",
+    "handsPlayed": 57,
+    "vpip": 26,
+    "pfr": 0,
+    "winnings": 0.72,
+    "lastSeen": 1761023058033,
+    "lastTable": "Aalen"
+  },
+  "anecik": {
+    "name": "anecik",
+    "handsPlayed": 69,
+    "vpip": 32,
+    "pfr": 24,
+    "winnings": 2.7600000000000002,
+    "lastSeen": 1761023110990,
+    "lastTable": "Aalen"
+  },
+  "Reload_Bruzz": {
+    "name": "Reload_Bruzz",
+    "handsPlayed": 70,
+    "vpip": 21,
+    "pfr": 11,
+    "winnings": 4.089999999999999,
+    "lastSeen": 1761023194429,
+    "lastTable": "Aalen"
+  },
+  "petit p0l0": {
+    "name": "petit p0l0",
+    "handsPlayed": 45,
+    "vpip": 11,
+    "pfr": 9,
+    "winnings": 0.7000000000000001,
+    "lastSeen": 1761023110990,
+    "lastTable": "Aalen"
+  },
+  "ZK4P": {
+    "name": "ZK4P",
+    "handsPlayed": 13,
+    "vpip": 7,
+    "pfr": 4,
+    "winnings": 0.16,
+    "lastSeen": 1761023194429,
+    "lastTable": "Aalen"
+  },
+  "_Sigma94_": {
+    "name": "_Sigma94_",
+    "handsPlayed": 14,
+    "vpip": 3,
+    "pfr": 2,
+    "winnings": 0.08,
+    "lastSeen": 1761077788838,
+    "lastTable": "Aalen 07"
+  },
+  "R00kierouch": {
+    "name": "R00kierouch",
+    "handsPlayed": 14,
+    "vpip": 4,
+    "pfr": 4,
+    "winnings": 0.62,
+    "lastSeen": 1761077788838,
+    "lastTable": "Aalen 07"
+  },
+  "HASUKA": {
+    "name": "HASUKA",
+    "handsPlayed": 14,
+    "vpip": 1,
+    "pfr": 1,
+    "winnings": 0.03,
+    "lastSeen": 1761077788838,
+    "lastTable": "Aalen 07"
+  },
+  "PS Zeus97163": {
+    "name": "PS Zeus97163",
+    "handsPlayed": 14,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761077788838,
+    "lastTable": "Aalen 07"
   }
 }

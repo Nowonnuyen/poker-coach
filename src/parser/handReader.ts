@@ -5,7 +5,8 @@ import chalk from "chalk";
 import { analyzeHand, getLiveAdviceFromAI } from "../analyzer/liveAnalyzer";
 import { updatePlayerStats } from "../analyzer/playerTracker";
 import { getTableProfileAndAdvice } from "../analyzer/opponentProfiler";
-import { getMathAdvice } from "../analyzer/mathAdvice"; // 🧮 nouveau
+import { getMathAdvice } from "../analyzer/mathAdvice"; // 🧮 module mathématique
+import { analyzeEmotions } from "../analyzer/emotionalAnalyzer"; // 🧠 module émotionnel
 
 const handsDir = path.resolve(
   "/Users/nowonnguyen/Library/Application Support/winamax/documents/accounts/NonoBasket/history"
@@ -42,10 +43,8 @@ function prettyRank(r: string): string {
 function buildCard(rank: string, suit: Suit): string[] {
   const r = prettyRank(rank);
   const { sym, colorize } = suitGlyph(suit);
-
   const top = r.padEnd(2, " ");
   const bot = r.padStart(2, " ");
-
   const border = chalk.whiteBright;
   const midSuit = colorize(sym);
 
@@ -106,7 +105,6 @@ export async function readNewData(filePath: string) {
   const previousSize = fileOffsets[filePath] || 0;
   const stats = fs.statSync(filePath);
   const newSize = stats.size;
-
   if (newSize <= previousSize) return;
 
   const stream = fs.createReadStream(filePath, {
@@ -142,13 +140,25 @@ export async function readNewData(filePath: string) {
           `Pot: ${meta.pot ?? "-"} | Pot odds: ${((meta.potOdds ?? 0) * 100).toFixed(1)}% | Évaluateur: ${meta.evaluatorUsed ? "oui" : "non"}`
         );
 
-        // 🟧 Conseil mathématique simple, clair, et illustré
-        const mathAdvice = getMathAdvice(meta);
+        // 🧮 Conseil mathématique (cours de lycée)
+        const mathAdvice = getMathAdvice(hand, meta);
         if (mathAdvice) console.log(mathAdvice);
 
+        // 💬 Conseils IA global
         const aiComment = await getLiveAdviceFromAI(hand);
         if (aiComment) console.log(chalk.cyanBright(aiComment));
 
+        // 🔴 Bloc Analyse Émotionnelle (encadré rouge distinctif)
+        const emotionReport = analyzeEmotions([hand]);
+        if (emotionReport) {
+          console.log(chalk.bgRed.white.bold("\n════════════════════════════════════════════════════"));
+          console.log(chalk.bgRed.white.bold("🔴  ANALYSE ÉMOTIONNELLE  🔴"));
+          console.log(chalk.bgRed.white.bold("════════════════════════════════════════════════════"));
+          console.log(chalk.redBright(emotionReport));
+          console.log(chalk.bgRed.white.bold("════════════════════════════════════════════════════\n"));
+        }
+
+        // 🏆 Si victoire
         const winMatch = hand.match(/(NonoBasket.*(won|remporte).*)/i);
         if (winMatch) {
           const winText = winMatch[1].trim();
@@ -159,6 +169,7 @@ export async function readNewData(filePath: string) {
           console.log(chalk.magenta.bold("└" + "─".repeat(lineLength) + "┘\n"));
         }
 
+        // 🎯 Profil de table
         const tableInfo = getTableProfileAndAdvice(hand);
         if (tableInfo) console.log(tableInfo);
       } catch (err) {
