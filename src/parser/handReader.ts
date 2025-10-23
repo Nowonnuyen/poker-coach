@@ -5,12 +5,17 @@ import chalk from "chalk";
 import { analyzeHand, getLiveAdviceFromAI } from "../analyzer/liveAnalyzer";
 import { updatePlayerStats } from "../analyzer/playerTracker";
 import { getTableProfileAndAdvice } from "../analyzer/opponentProfiler";
-import { getMathAdvice } from "../analyzer/mathAdvice"; // 🧮 module mathématique
-import { analyzeEmotions } from "../analyzer/emotionalAnalyzer"; // 🧠 module émotionnel
+import { getMathAdvice } from "../analyzer/mathAdvice";
+import { analyzeEmotions } from "../analyzer/emotionalAnalyzer";
 
+// Dossier Winamax
 const handsDir = path.resolve(
   "/Users/nowonnguyen/Library/Application Support/winamax/documents/accounts/NonoBasket/history"
 );
+
+// Fichier session pour le HUD
+const sessionPath = path.resolve(process.cwd(), "session.json");
+
 const fileOffsets: Record<string, number> = {};
 let sessionHandCount = 0;
 
@@ -101,6 +106,18 @@ function highlightHandLines(hand: string) {
 
 /* ---------------------------------------------------------- */
 
+function updateHUDSession(data: {
+  handNumber: number;
+  advice: string;
+  mathAdvice: string;
+  emotion: string;
+  tableProfile: string;
+}) {
+  fs.writeFileSync(sessionPath, JSON.stringify(data, null, 2), "utf-8");
+}
+
+/* ---------------------------------------------------------- */
+
 export async function readNewData(filePath: string) {
   const previousSize = fileOffsets[filePath] || 0;
   const stats = fs.statSync(filePath);
@@ -130,25 +147,18 @@ export async function readNewData(filePath: string) {
 
       try {
         updatePlayerStats(hand);
-
         const { advice, reason, meta } = await analyzeHand(hand);
 
         console.log(highlightHandLines(hand));
-
         console.log(`➡️  Conseils IA (local) : ${chalk.green.bold(advice)} (${reason})`);
-        console.log(
-          `Pot: ${meta.pot ?? "-"} | Pot odds: ${((meta.potOdds ?? 0) * 100).toFixed(1)}% | Évaluateur: ${meta.evaluatorUsed ? "oui" : "non"}`
-        );
+        console.log(`Pot: ${meta.pot ?? "-"} | Pot odds: ${((meta.potOdds ?? 0) * 100).toFixed(1)}%`);
 
-        // 🧮 Conseil mathématique (cours de lycée)
         const mathAdvice = getMathAdvice(hand, meta);
         if (mathAdvice) console.log(mathAdvice);
 
-        // 💬 Conseils IA global
         const aiComment = await getLiveAdviceFromAI(hand);
         if (aiComment) console.log(chalk.cyanBright(aiComment));
 
-        // 🔴 Bloc Analyse Émotionnelle (encadré rouge distinctif)
         const emotionReport = analyzeEmotions([hand]);
         if (emotionReport) {
           console.log(chalk.bgRed.white.bold("\n════════════════════════════════════════════════════"));
@@ -158,7 +168,6 @@ export async function readNewData(filePath: string) {
           console.log(chalk.bgRed.white.bold("════════════════════════════════════════════════════\n"));
         }
 
-        // 🏆 Si victoire
         const winMatch = hand.match(/(NonoBasket.*(won|remporte).*)/i);
         if (winMatch) {
           const winText = winMatch[1].trim();
@@ -169,9 +178,18 @@ export async function readNewData(filePath: string) {
           console.log(chalk.magenta.bold("└" + "─".repeat(lineLength) + "┘\n"));
         }
 
-        // 🎯 Profil de table
         const tableInfo = getTableProfileAndAdvice(hand);
         if (tableInfo) console.log(tableInfo);
+
+        // 💾 Écriture dans session.json (pour le HUD Ink)
+        updateHUDSession({
+          handNumber: sessionHandCount,
+          advice,
+          mathAdvice: mathAdvice ?? "",
+          emotion: emotionReport ?? "",
+          tableProfile: tableInfo ?? "",
+        });
+
       } catch (err) {
         console.error("Erreur dans l’analyse de la main :", err);
       }
@@ -183,7 +201,6 @@ export async function readNewData(filePath: string) {
 
 export function watchHandsFolder() {
   console.log(`[Watcher] Surveillance du dossier : ${handsDir}`);
-
   const watcher = chokidar.watch(handsDir, {
     persistent: true,
     ignoreInitial: false,

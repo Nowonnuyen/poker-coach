@@ -1,12 +1,12 @@
 {
   "NonoBasket": {
     "name": "NonoBasket",
-    "handsPlayed": 499,
-    "vpip": 140,
-    "pfr": 48,
-    "winnings": 39.38,
-    "lastSeen": 1761077788838,
-    "lastTable": "Aalen 07"
+    "handsPlayed": 535,
+    "vpip": 151,
+    "pfr": 52,
+    "winnings": 42.79000000000001,
+    "lastSeen": 1761202507554,
+    "lastTable": "Aalen 02"
   },
   "Nouvlabien": {
     "name": "Nouvlabien",
@@ -52,10 +52,12 @@
   },
   "6carry12judg": {
     "name": "6carry12judg",
-    "handsPlayed": 27,
-    "vpip": 6,
+    "handsPlayed": 30,
+    "vpip": 7,
     "pfr": 2,
-    "winnings": 0.18
+    "winnings": 0.18,
+    "lastSeen": 1761202507554,
+    "lastTable": "Aalen 02"
   },
   "NonoBasket showed [8d 8c] and won 0.33€ with One pair : 8\nSeat 3: 6carry12judg": {
     "name": "NonoBasket showed [8d 8c] and won 0.33€ with One pair : 8\nSeat 3: 6carry12judg",
@@ -89,12 +91,12 @@
   },
   "jep4yebien": {
     "name": "jep4yebien",
-    "handsPlayed": 165,
-    "vpip": 65,
-    "pfr": 51,
-    "winnings": 20.699999999999996,
-    "lastSeen": 1760855757125,
-    "lastTable": "Aalen 03"
+    "handsPlayed": 181,
+    "vpip": 67,
+    "pfr": 53,
+    "winnings": 21.019999999999996,
+    "lastSeen": 1761202433378,
+    "lastTable": "Aalen 02"
   },
   "epais-505117": {
     "name": "epais-505117",
@@ -242,12 +244,12 @@
   },
   "Sylvanius": {
     "name": "Sylvanius",
-    "handsPlayed": 39,
+    "handsPlayed": 55,
     "vpip": 16,
     "pfr": 14,
     "winnings": 0.16,
-    "lastSeen": 1760858624711,
-    "lastTable": "Aalen"
+    "lastSeen": 1761202433378,
+    "lastTable": "Aalen 02"
   },
   "haiphong69": {
     "name": "haiphong69",
@@ -599,5 +601,122 @@
     "winnings": 0,
     "lastSeen": 1761077788838,
     "lastTable": "Aalen 07"
+  },
+  "WithMyCap": {
+    "name": "WithMyCap",
+    "handsPlayed": 11,
+    "vpip": 2,
+    "pfr": 1,
+    "winnings": 0.39,
+    "lastSeen": 1761114853641,
+    "lastTable": "Aalen 06"
+  },
+  "Tiger-Weed": {
+    "name": "Tiger-Weed",
+    "handsPlayed": 11,
+    "vpip": 5,
+    "pfr": 2,
+    "winnings": 0.2,
+    "lastSeen": 1761114853641,
+    "lastTable": "Aalen 06"
+  },
+  "TV_Sniper31": {
+    "name": "TV_Sniper31",
+    "handsPlayed": 2,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761114677204,
+    "lastTable": "Aalen 06"
+  },
+  "ErwinKlein": {
+    "name": "ErwinKlein",
+    "handsPlayed": 10,
+    "vpip": 3,
+    "pfr": 3,
+    "winnings": 0.06,
+    "lastSeen": 1761114853641,
+    "lastTable": "Aalen 06"
+  },
+  "Lathailander": {
+    "name": "Lathailander",
+    "handsPlayed": 2,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761114853641,
+    "lastTable": "Aalen 06"
+  },
+  "pinla67": {
+    "name": "pinla67",
+    "handsPlayed": 25,
+    "vpip": 17,
+    "pfr": 8,
+    "winnings": 1.4900000000000002,
+    "lastSeen": 1761202507554,
+    "lastTable": "Aalen 02"
+  },
+  "BuzeM": {
+    "name": "BuzeM",
+    "handsPlayed": 6,
+    "vpip": 4,
+    "pfr": 1,
+    "winnings": 0,
+    "lastSeen": 1761196073201,
+    "lastTable": "Aalen"
+  },
+  "ShinT-sT": {
+    "name": "ShinT-sT",
+    "handsPlayed": 6,
+    "vpip": 3,
+    "pfr": 1,
+    "winnings": 0.7,
+    "lastSeen": 1761196073201,
+    "lastTable": "Aalen"
+  },
+  "dormassd": {
+    "name": "dormassd",
+    "handsPlayed": 4,
+    "vpip": 1,
+    "pfr": 1,
+    "winnings": 0.1,
+    "lastSeen": 1761196073201,
+    "lastTable": "Aalen"
+  },
+  "cricket 64": {
+    "name": "cricket 64",
+    "handsPlayed": 19,
+    "vpip": 17,
+    "pfr": 2,
+    "winnings": 0.54,
+    "lastSeen": 1761202507554,
+    "lastTable": "Aalen 02"
+  },
+  "cricket 64 showed [5h Jh] and won 0.10€ with One pair : Jacks\nSeat 3: pinla67": {
+    "name": "cricket 64 showed [5h Jh] and won 0.10€ with One pair : Jacks\nSeat 3: pinla67",
+    "handsPlayed": 2,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761202416985,
+    "lastTable": "Aalen 02"
+  },
+  "cricket 64 showed [Tc Ah] and lost with Two pairs : Aces and Kings\nSeat 3: pinla67": {
+    "name": "cricket 64 showed [Tc Ah] and lost with Two pairs : Aces and Kings\nSeat 3: pinla67",
+    "handsPlayed": 2,
+    "vpip": 0,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761202428960,
+    "lastTable": "Aalen 02"
+  },
+  "XennN_fr": {
+    "name": "XennN_fr",
+    "handsPlayed": 3,
+    "vpip": 1,
+    "pfr": 0,
+    "winnings": 0,
+    "lastSeen": 1761202507554,
+    "lastTable": "Aalen 02"
   }
 }
